@@ -5,68 +5,117 @@
     {
       "name": "mongoDbUri",
       "label": "MongoDB Connection URI",
-      "helpText": "List of Mongo DB nodes separated by comma. ex: 192.285.234.12:27017,192.287.123.11:27017",
+      "helpText": "List of Mongo DB nodes separated by comma. ex: mongodb+srv://<username>:<password>@cluster1.sbxt8.mongodb.net",
       "isOptional": false,
       "paramType": "TEXT"
     },
     {
       "name": "database",
       "label": "MongoDB database",
-      "helpText": "Database in MongoDB to read the collection. ex: my-db.",
+      "helpText": "Database in MongoDB to read the collection. ex: dev-healthnote.",
       "isOptional": false,
       "paramType": "TEXT"
     },
     {
       "name": "collection",
       "label": "MongoDB collection",
-      "helpText": "Name of the collection in MongoDB database. ex: my-collection.",
+      "helpText": "Name of the collection in MongoDB database. ex: Link.",
       "isOptional": false,
       "paramType": "TEXT"
     },
     {
       "name": "outputTableSpec",
       "label": "BigQuery table spec to write the data",
-      "helpText": "BigQuery destination table spec. e.g bigquery-project:dataset.output_table",
+      "helpText": "BigQuery destination table spec. ex: bigquery-project.dataset.output_table",
       "isOptional": false,
-      "paramType": "TEXT"
+      "paramType": "BIGQUERY_TABLE"
     },
     {
       "name": "userOption",
-      "label": "user option",
-      "helpText": "Could be one of FLATTEN or NONE. FLATTEN will flatten the documents for 1 level. NONE will store the whole document as json string.",
+      "label": "Document flattening",
+      "helpText": "Could be one of FLATTEN or NONE. FLATTEN will flatten the documents for 1 level. NONE will store the whole document as json string on 'source_data' field.",
       "isOptional": false,
       "paramType": "TEXT",
       "regexes": [
         "^(FLATTEN|NONE)$"
-      ]
-    },
-    {
-      "name":"javascriptDocumentTransformGcsPath",
-      "label" : "JavaScript File Path",
-      "helpText": "JS File Path",
-      "isOptional": true,
-      "paramType": "TEXT"
-    },
-    {
-      "name":"javascriptDocumentTransformFunctionName",
-      "label":"UDF JavaScript Function Name",
-      "helpText":"JS Function Name",
-      "isOptional": true,
-	  "paramType":"TEXT"
+      ],
+	  "defaultValue": "FLATTEN"
     },
 	{
 	  "name":"aggregatePipelineFactoryGcpPath",
-	  "label" : "JavaScript Aggregate Factory File Path",
-	  "helpText": "JS File Path",
+	  "label" : "Aggregate pipeline factory JavaScript function GCS file path",
+	  "helpText": "JS function GCS file path",
 	  "isOptional": false,
-	  "paramType": "TEXT"
+	  "paramType": "JAVASCRIPT_UDF_FILE"
 	},
 	{
 	  "name":"aggregatePipelineFactoryFunctionName",
-	  "label":"UDF JavaScript Aggregate Factory Function Name",
-	  "helpText":"JS Function Name",
-	  "isOptional":false,
+	  "label":"Aggregate pipeline factory JavaScript function name",
+	  "helpText":"JS function name",
+	  "isOptional": false,
 	  "paramType":"TEXT"
+	},
+	{
+		"name": "numSplits",
+		"label": "MongoDB query bucketing",
+		"helpText": "Informs how many buckets the extracted resultSet can be split to parallelize ingestion",
+		"isOptional": false,
+		"paramType": "NUMBER",
+		"defaultValue": "10"
+	},
+	{
+		"name": "kmsEncryptionKey",
+		"label": "Google Cloud KMS key",
+		"helpText": "Cloud KMS Encryption Key to decrypt the mongodb uri connection string. If Cloud KMS key is passed in, the mongodb uri connection string must all be passed in encrypted. ex: projects/your-project/locations/global/keyRings/your-keyring/cryptoKeys/your-key",
+		"isOptional": true,
+		"paramType": "TEXT"
+	},
+    {
+      "name":"javascriptDocumentTransformGcsPath",
+      "label" : "UDF transform JavaScript function GCS file path",
+      "helpText": "JS function GCS file path",
+      "isOptional": true,
+      "paramType": "JAVASCRIPT_UDF_FILE"
+    },
+    {
+      "name":"javascriptDocumentTransformFunctionName",
+      "label":"UDF transform JavaScript function name",
+      "helpText":"JS function name",
+      "isOptional": true,
+	  "paramType":"TEXT"
+    },
+	{
+		"name": "defaultSdkHarnessLogLevel",
+		"label": "Apache Beam SDK harness log level",
+		"helpText": "Could be one of TRACE, DEBUG, INFO, WARN or ERROR.",
+		"isOptional": true,
+		"paramType": "TEXT",
+		"regexes": [
+		  "^(TRACE|DEBUG|INFO|WARN|ERROR)$"
+		],
+		"defaultValue": "INFO"
+	},
+	{
+		"name": "defaultWorkerLogLevel",
+		"label": "Dataflow worker log level",
+		"helpText": "Could be one of DEBUG, INFO, WARN or ERROR",
+		"isOptional": true,
+		"paramType": "TEXT",
+		"regexes": [
+		  "^(DEBUG|INFO|WARN|ERROR)$"
+		],
+		"defaultValue": "INFO"
+	},
+	{
+		"name": "flexRSGoal",
+		"label": "Job execution goal",
+		"helpText": "Could be one of SPEED_OPTIMIZED or COST_OPTIMIZED. Speed optimizes pipeline execution for lower execution time. Cost means Dataflow service chooses any available discounted resources preferably.",
+		"isOptional": true,
+		"paramType": "TEXT",
+		"regexes": [
+		  "^(SPEED_OPTIMIZED|COST_OPTIMIZED)$"
+		],
+		"defaultValue": "SPEED_OPTIMIZED"
 	}
   ]
 }
