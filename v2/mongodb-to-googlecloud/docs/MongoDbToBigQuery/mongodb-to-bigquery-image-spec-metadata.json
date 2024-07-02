@@ -26,7 +26,7 @@
     {
       "name": "outputTableSpec",
       "label": "BigQuery table spec to write the data",
-      "helpText": "BigQuery destination table spec. ex: bigquery-project.dataset.output_table",
+      "helpText": "BigQuery destination table spec. ex: bigquery-project.dataset.output_table or bigquery-project:dataset.output_table",
       "isOptional": false,
       "paramType": "BIGQUERY_TABLE"
     },

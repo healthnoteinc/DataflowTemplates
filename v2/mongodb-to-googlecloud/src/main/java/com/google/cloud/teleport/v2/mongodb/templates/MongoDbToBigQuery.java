@@ -143,11 +143,22 @@ public class MongoDbToBigQuery {
     String mongoDbUri = maybeDecrypt(options.getMongoDbUri(), options.getKMSEncryptionKey()).get();
 
     String tableId = options.getOutputTableSpec();
-    String[] tableComponents = tableId.split("\\.");
 
-    String projectId = tableComponents[0];
-    String datasetName = tableComponents[1];
-    String tableName = tableComponents[2];
+    String projectId, datasetName, tableName;
+
+    String[] tableComponents = tableId.split("\\.");
+    if (tableComponents.length < 3) {
+      String[] tableNsComponents = tableComponents[0].split(":");
+      tableName = tableComponents[1];
+      tableComponents = new String[3];
+      tableComponents[0] = tableNsComponents[0];
+      tableComponents[1] = tableNsComponents[1];
+      tableComponents[2] = tableName;
+    }
+
+    projectId = tableComponents[0];
+    datasetName = tableComponents[1];
+    tableName = tableComponents[2];
 
     Table table = bigquery.getTable(TableId.of(projectId, datasetName, tableName));
 
