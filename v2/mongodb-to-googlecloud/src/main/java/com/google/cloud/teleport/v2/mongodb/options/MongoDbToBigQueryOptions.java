@@ -156,5 +156,16 @@ public class MongoDbToBigQueryOptions {
     String getAggregatePipelineFactoryFunctionName();
 
     void setAggregatePipelineFactoryFunctionName(String aggregatePipelineFactoryFunctionName);
+
+    @TemplateParameter.Integer(
+        order = 3,
+        description =
+            "The number of uniform splits your collection will be splitted before running your aggregate query.",
+        helpText =
+            "How many buckets your aggregator resultSet can be splitted. For example, your collection has 1 million documents, setting 10 splits will separate your collection into 10 buckets of 100k documents, which will be subject of the other aggregator stages (like $match).",
+        example = "10")
+    Integer getNumSplits();
+
+    void setNumSplits(Integer numSplits);
   }
 }

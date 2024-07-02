@@ -177,6 +177,7 @@ public class MongoDbToBigQuery {
                 .withUri(mongoDbUri)
                 .withDatabase(options.getDatabase())
                 .withCollection(options.getCollection())
+                .withNumSplits(options.getNumSplits())
                 .withQueryFn(aggregatePipeline))
         .apply(
             "UDF",
