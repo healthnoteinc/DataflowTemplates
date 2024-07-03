@@ -134,4 +134,38 @@ public class MongoDbToBigQueryOptions {
 
     void setJavascriptDocumentTransformFunctionName(String javascriptDocumentTransformFunctionName);
   }
+
+  public interface MongoDbAggregateOptions extends PipelineOptions {
+    @TemplateParameter.JavascriptUdfFile(
+        order = 1,
+        description = "JavaScript UDF MongoDB aggregate pipeline factory path in Cloud Storage.",
+        helpText =
+            "The Cloud Storage URI of the `.js` file that defines the JavaScript user-defined function (UDF) to use.",
+        example = "gs://your-bucket/your-factories/*.js")
+    String getAggregatePipelineFactoryGcpPath();
+
+    void setAggregatePipelineFactoryGcpPath(String aggregatePipelineFactoryGcpPath);
+
+    @TemplateParameter.Text(
+        order = 2,
+        description =
+            "The name of the JavaScript function to call as your UDF MongoDB aggregate pipeline factory.",
+        helpText =
+            "The name of the JavaScript user-defined function (UDF) to use. For example, if your JavaScript function code is `myTransform(inJson) { /*...do stuff...*/ }`, then the function name is myTransform. For sample JavaScript UDFs, see UDF Examples (https://github.com/GoogleCloudPlatform/DataflowTemplates#udf-examples).",
+        example = "factory")
+    String getAggregatePipelineFactoryFunctionName();
+
+    void setAggregatePipelineFactoryFunctionName(String aggregatePipelineFactoryFunctionName);
+
+    @TemplateParameter.Integer(
+        order = 3,
+        description =
+            "The number of uniform splits your collection will be splitted before running your aggregate query.",
+        helpText =
+            "How many buckets your aggregator resultSet can be splitted. For example, your collection has 1 million documents, setting 10 splits will separate your collection into 10 buckets of 100k documents, which will be subject of the other aggregator stages (like $match).",
+        example = "10")
+    Integer getNumSplits();
+
+    void setNumSplits(Integer numSplits);
+  }
 }
